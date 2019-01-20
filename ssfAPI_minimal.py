@@ -6,7 +6,7 @@ import codecs
 import re
 import locale
 
-sys.stdout = codecs.getwriter(locale.getpreferredencoding())(sys.stdout)
+#sys.stdout = codecs.getwriter(locale.getpreferredencoding())(sys.stdout)
 
 
 class Coreference_entity():
@@ -92,7 +92,7 @@ class Node_vandan() :
                 modeidpart = modeid.split('%')[1]
                 modeid = modeid.split('%')[0]
                 
-                if not self.checkuniqueEntityinmodelist(self.upper.upper.acoreferenceEntityNodeList,uniqid) :
+                if self.checkuniqueEntityinmodelist(self.upper.upper.acoreferenceEntityNodeList,uniqid) :
                     unique = self.getuniqueEntityinmodelist(self.upper.upper.acoreferenceEntityNodeList,uniqid)
                 else:
                     unique = Coreference_entity(uniqid) # new entity creation
@@ -266,7 +266,7 @@ class Node_vandan() :
 	#self.updateDrel()
 
     def assignName(self) :
-        if self.__attributes.has_key('name') :
+        if 'name' in self.__attributes:
             self.name = self.getAttribute('name')
         else :
             self.errors.append('No name for this token Node')
@@ -290,7 +290,7 @@ class Node_vandan() :
         return ('\t'.join(x for x in returnValue) + '\t' + delim.join(x for x in fs))
 
     def getAttribute(self,key) :
-        if self.__attributes.has_key(key) :
+        if key in self.__attributes:
             return self.__attributes[key]
         else :
             return None
@@ -732,12 +732,12 @@ class ChunkNode_vandan() :
             self.errors.append('No name for this chunk Node')
 
     def updateDrel(self) :
-        if self.__attributes.has_key('drel') :
+        if 'drel' in self.__attributes:
             drelList = self.getAttribute('drel').split(':')
             if len(drelList) == 2 :
                 self.parent = drelList[1]
                 self.parentRelation = self.getAttribute('drel').split(':')[0]
-        elif self.__attributes.has_key('dmrel') :
+        elif 'dmrel' in self.__attributes:
             drelList = self.getAttribute('dmrel').split(':')
             if len(drelList) == 2 :
                 self.parent = drelList[1]
@@ -775,7 +775,7 @@ class ChunkNode_vandan() :
         return returnStringList,nodePosn
 
     def getAttribute(self,key) :
-        if self.__attributes.has_key(key) :
+        if key in self.__attributes:
             return self.__attributes[key]
         else :
             return None
