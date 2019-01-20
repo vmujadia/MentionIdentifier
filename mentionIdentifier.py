@@ -73,4 +73,4 @@ class MentionIdentifier():
 
 obj = MentionIdentifier()
 d = ssf.Document(sys.argv[1])
-obj.get_potiential_entities()
+obj.get_potiential_entities(d)
