@@ -83,22 +83,22 @@ class Node_vandan() :
     def analyzeNode(self, text) :
         [token, tokenType, fsDict, fsList] = getTokenFeats(text.strip().split())
         attributeUpdateStatus = self.updateAttributes(token, tokenType, fsDict, fsList)
-	acrefMod = self.getAttribute('acrefMod')
-	if acrefMod != None :
+        acrefMod = self.getAttribute('acrefMod')
+        if acrefMod != None :
             acrefModtemp = acrefMod.split(',')
             for i in acrefModtemp :
                 uniqid = i.split(':')[1]
                 modeid = i.split(':')[0]
                 modeidpart = modeid.split('%')[1]
                 modeid = modeid.split('%')[0]
-
+                
                 if not self.checkuniqueEntityinmodelist(self.upper.upper.acoreferenceEntityNodeList,uniqid) :
+                    unique = self.getuniqueEntityinmodelist(self.upper.upper.acoreferenceEntityNodeList,uniqid)
+                else:
                     unique = Coreference_entity(uniqid) # new entity creation
                     unique.startlineno = self.linenumber
                     unique.modeid = modeid
                     self.upper.upper.acoreferenceEntityNodeList.append(unique)
-                else :
-                    unique = self.getuniqueEntityinmodelist(self.upper.upper.acoreferenceEntityNodeList,uniqid)
 
                 unique.lines.append(self.linenumber)
                 unique.nodes.append(self)
@@ -110,21 +110,21 @@ class Node_vandan() :
                 if modeidpart.strip() == '1' :
                     unique.modeendline = self.linenumber
 
-	acrefModhead = self.getAttribute('acrefModHead')
-	if acrefModhead != None :
+        acrefModhead = self.getAttribute('acrefModHead')
+        if acrefModhead != None :
             acrefModheadtemp=acrefModhead.split(',')
             for i in acrefModheadtemp :
                 modeid = i.split(':')[1]
                 modehead = i.split(':')[0]
                 unique=self.getmodeinmodelistbymode(self.upper.upper.acoreferenceEntityNodeList,modeid)
                 unique.crefmodheadtext=modehead
-
-	cref=self.getAttribute('cref')
-	if cref!=None :
+                
+        cref=self.getAttribute('cref')
+        if cref:
             creftemp=cref.split(',')
             for i in creftemp:
                 if i.strip() == '':
-                        continue
+                    continue
                 uniqidp=i.split(':')[0]
                 uniqidpart=uniqidp.split('%')[1]
                 uniqid=uniqidp.split('%')[0]
@@ -164,9 +164,8 @@ class Node_vandan() :
                 unique.wordwithpos.append(self.lex+'_'+self.type)
                 if uniqidpart.strip() == '1':
                     unique.endlineno = self.linenumber
-
-	crefHead=self.getAttribute('crefHead')
-	if crefHead!=None :
+        crefHead=self.getAttribute('crefHead')
+        if crefHead:
             listforentity=[]
             crefHeadtemp=crefHead.split(',')
             for i in crefHeadtemp :
@@ -177,7 +176,7 @@ class Node_vandan() :
                 unique.headnode=self
                 listforentity.append(unique)
             crefType = self.getAttribute('crefType')
-            if crefType != None :
+            if crefType:
                 crefTypetemp = crefType.split(',')
                 for i in crefTypetemp:
                     ctype = i.split(':')[0]
@@ -185,9 +184,9 @@ class Node_vandan() :
                     unique=listforentity.pop(0)
                     unique.parent=self.getentity(self.upper.upper.coreferenceChainNodeList,cuniqueid)
                     unique.parentrelation=ctype
-
-	crefChainHead=self.getAttribute('crefChainHead')
-	if crefChainHead != None:
+                    
+        crefChainHead=self.getAttribute('crefChainHead')
+        if crefChainHead:
             crefChainHeadtemp = crefChainHead.split(',')
             for i in crefChainHeadtemp :
                 uniqid=i.split(':')[0]
@@ -195,68 +194,67 @@ class Node_vandan() :
                 chain = self.getchainfromchainlist(self.upper.upper.coreferenceChainNodeList,chainid)
                 unique = self.getentityfromchainlist(chain ,uniqid)
                 chain.chainhead=unique
-
-	if attributeUpdateStatus == 0 :
+        if attributeUpdateStatus == 0 :
             self.errors.append("Can't update attributes for node")
             self.probSent = True
 
     def checkforchainlist(self,commingList,chainid) :
-	for i in commingList:
-		if i.chainid == chainid :
-			return True
-	return False
+        for i in commingList:
+            if i.chainid == chainid :
+                return True
+        return False
 
     def getchainfromchainlist(self,commingList,chainid) :
-	for i in commingList:
-		if i.chainid == chainid :
-			return i
-	return None
+        for i in commingList:
+            if i.chainid == chainid :
+                return i
+        return None
 
     def checkmodeinmodelistbymode (self,commingList, modeid) :
-	    for i in commingList :
-		    if i.modeid == modeid :
-			    return True
-	    return False
+        for i in commingList :
+            if i.modeid == modeid :
+                return True
+        return False
 
     def getmodeinmodelistbymode (self,commingList, modeid) :
-	    for i in commingList :
-		    if i.modeid == modeid :
-			    return i
-	    return None
+        for i in commingList :
+            if i.modeid == modeid :
+                return i
+        return None
 
-    def checkuniqueEntityinmodelist (self,commingList, uniqueid) :
-	    for i in commingList :
-		    if i.uniqueid == uniqueid :
-			    return True
-	    return False
+    def checkuniqueEntityinmodelist (self,commingList, uniqueid):
+        for i in commingList :
+            if i.uniqueid == uniqueid :
+                return True
+        return False
 
     def getuniqueEntityinmodelist (self,commingList, uniqueid) :
-	    for i in commingList :
-		    if i.uniqueid == uniqueid :
-			    return i
-	    return None
+        for i in commingList :
+            if i.uniqueid == uniqueid :
+                return i
+        return None
 
     def checkforentityinchainlist(self, chain ,uniqueid) :
-	for i in chain.nodeList :
-		if i.uniqueid == uniqueid :
-			return True
-	return False
+        for i in chain.nodeList :
+            if i.uniqueid == uniqueid :
+                return True
+        return False
 
 
     def getentityfromchainlist(self, chain ,uniqueid) :
-	for i in chain.nodeList :
-		if i.uniqueid == uniqueid :
-			return i
-	return None
+        for i in chain.nodeList :
+            if i.uniqueid == uniqueid :
+                return i
+        return None
 
     def getentity(self, chain ,uniqueid) :
 	#print '\n',uniqueid
-	for i in chain :
-		for j in i.nodeList:
-			#print 'in',j.uniqueid,j.chainid,uniqueid
-			if j.uniqueid == uniqueid :
-				return j
-	return None
+        for i in chain :
+            for j in i.nodeList:
+                #print 'in',j.uniqueid,j.chainid,uniqueid
+                if j.uniqueid == uniqueid :
+                    return j
+        return None
 
     def updateAttributes(self,token, tokenType, fsDict, fsList) :
         self.fsList = fsList
