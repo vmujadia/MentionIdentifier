@@ -40,6 +40,7 @@ class MentionIdentifier():
             for tree in d.nodeList :
                 for chunkNode in tree.nodeList :
                     for node in chunkNode.nodeList:
+                        print (node.lex)
                         flag = False
                         if node.type in {'NN','NNC','NNP','NNPC','QC','JJ','QF','JJP','SYM'}:
                             if node.type!='SYM':
@@ -48,6 +49,8 @@ class MentionIdentifier():
                                 drelr = node.getAttribute('drel').split(':')[0]
                             elif node.getAttribute('dmrel')!=None:
                                 drelr = node.getAttribute('dmrel').split(':')[0]
+                            else:
+                                drelr = ''
                             if ('_' not in drelr  and node.type != 'NNPC') or node.type=='SYM':
                                 if len(temp)>0:
                                         list_entity.append(temp)

@@ -535,7 +535,7 @@ class Node() :
         self.assignName()
 
     def assignName(self) :
-        if self.__attributes.has_key('name') :
+        if 'name' in self.__attributes :
             self.name = self.getAttribute('name')
         else :
             self.errors.append('No name for this token Node')
@@ -559,7 +559,7 @@ class Node() :
         return ('\t'.join(x for x in returnValue) + '\t' + delim.join(x for x in fs))
 
     def getAttribute(self,key) :
-        if self.__attributes.has_key(key) :
+        if key in self.__attributes :
             return self.__attributes[key]
         else :
             return None
@@ -617,18 +617,18 @@ class ChunkNode() :
         self.updateDrel()
 
     def assignName(self) :
-        if self.__attributes.has_key('name') :
+        if 'name' in self.__attributes :
             self.name = self.getAttribute('name')
         else :
             self.errors.append('No name for this chunk Node')
 
     def updateDrel(self) :
-        if self.__attributes.has_key('drel') :
+        if 'drel' in self.__attributes :
             drelList = self.getAttribute('drel').split(':')
             if len(drelList) == 2 :
                 self.parent = drelList[1]
                 self.parentRelation = self.getAttribute('drel').split(':')[0]
-        elif self.__attributes.has_key('dmrel') :
+        elif 'dmrel' in self.__attributes :
             drelList = self.getAttribute('dmrel').split(':')
             if len(drelList) == 2 :
                 self.parent = drelList[1]
@@ -666,7 +666,7 @@ class ChunkNode() :
         return returnStringList
 
     def getAttribute(self,key) :
-        if self.__attributes.has_key(key) :
+        if key in self.__attributes :
             return self.__attributes[key]
         else :
             return None
@@ -726,7 +726,7 @@ class ChunkNode_vandan() :
         self.updateDrel()
 
     def assignName(self) :
-        if self.__attributes.has_key('name') :
+        if 'name' in self.__attributes :
             self.name = self.getAttribute('name')
         else :
             self.errors.append('No name for this chunk Node')
@@ -857,11 +857,11 @@ class Sentence() :
                     lastContext = currentChunkNode
                 else :
                     self.upper.linecount += 1
-                    #currentNode = Node(line + '\n',lastContext ,self.upper.linecount)
-                    #lastContext.nodeList.append(currentNode)
-                    #currentNode.upper = lastContext
-		    # newer part vandan
-                    if len(splitLine)>0 :
+                    currentNode = Node(line + '\n',lastContext ,self.upper.linecount)
+                    lastContext.nodeList.append(currentNode)
+                    currentNode.upper = lastContext
+                    # newer part vandan
+                    if len(splitLine)>100000000000000 :
                         chunk_split = ''.join ([x for x in splitLine if 'chunkType=' in x]).replace('>','').split('=')[1].replace("'","").split(':')
                         chunk_name = chunk_split[1]
                         chunk_relation = chunk_split[0]
@@ -878,7 +878,6 @@ class Sentence() :
                             currentChunkNode.nodeList.append(currentNode_ext)
                             currentNode_ext.upper = currentChunkNode
                         previous_chunk_name = chunk_name
-                        
         for i in lastContext.nodeList:
             for j in i.nodeList:
                 drel = j.getAttribute('drel')
