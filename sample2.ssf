@@ -1,0 +1,6 @@
+<Sentence id="1">
+1     	((     	NP     	<fs af='मुख्यमंत्री,n,m,sg,3,d,0,0' head="मुख्यमंत्री">     
+1.1     	पूर्व     	JJ     	<fs af='पूर्व,adj,any,any,,any,,'>     
+1.2     	मुख्यमंत्री     	NN     	<fs af='मुख्यमंत्री,n,m,sg,3,d,0,0' name="मुख्यमंत्री">     
+     	))     	     	     
+</Sentence>
