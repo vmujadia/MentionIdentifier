@@ -57,7 +57,7 @@ class Node_vandan() :
         self.linenumber = linenumber
         self.chunkparentRelation = relation
         self.childList = []
-        
+
         self.number='any'
         self.person='none'
         self.gender=None
@@ -66,7 +66,7 @@ class Node_vandan() :
         self.morphPOS=None
         self.tamUtf=None
         self.tamWx=None
-        
+
         self.analyzeNode(self.text)
         if self.getAttribute('af')!=None:
             aa= self.getAttribute('af').strip().split(',')
@@ -91,7 +91,7 @@ class Node_vandan() :
                 modeid = i.split(':')[0]
                 modeidpart = modeid.split('%')[1]
                 modeid = modeid.split('%')[0]
-                
+
                 if self.checkuniqueEntityinmodelist(self.upper.upper.acoreferenceEntityNodeList,uniqid) :
                     unique = self.getuniqueEntityinmodelist(self.upper.upper.acoreferenceEntityNodeList,uniqid)
                 else:
@@ -118,7 +118,7 @@ class Node_vandan() :
                 modehead = i.split(':')[0]
                 unique=self.getmodeinmodelistbymode(self.upper.upper.acoreferenceEntityNodeList,modeid)
                 unique.crefmodheadtext=modehead
-                
+
         cref=self.getAttribute('cref')
         if cref:
             creftemp=cref.split(',')
@@ -184,7 +184,7 @@ class Node_vandan() :
                     unique=listforentity.pop(0)
                     unique.parent=self.getentity(self.upper.upper.coreferenceChainNodeList,cuniqueid)
                     unique.parentrelation=ctype
-                    
+
         crefChainHead=self.getAttribute('crefChainHead')
         if crefChainHead:
             crefChainHeadtemp = crefChainHead.split(',')
@@ -314,7 +314,8 @@ class Node_vandan() :
                 self.parentRelation = self.getAttribute('dmrel').split(':')[0]
 
 class Node() :
-    def __init__(self,text,upper,linenumber) :
+    def __init__(self, text, upper, linenumber):
+        #print(text.strip())
         self.text = text
         self.lex = None
         self.type = None
@@ -327,7 +328,7 @@ class Node() :
         self.fsList = None
         self.upper = upper
         self.linenumber = linenumber
-        
+
         self.number='any'
         self.person='none'
         self.gender=None
@@ -378,7 +379,7 @@ class Node() :
                         unique.modestartline = self.linenumber
                 if modeidpart.strip() == '1' :
                         unique.modeendline = self.linenumber
-                        
+
         acrefModhead = self.getAttribute('acrefModHead')
         if acrefModhead != None :
             acrefModheadtemp=acrefModhead.split(',')
@@ -387,7 +388,7 @@ class Node() :
                 modehead = i.split(':')[0]
                 unique=self.getmodeinmodelistbymode(self.upper.upper.acoreferenceEntityNodeList,modeid)
                 unique.crefmodheadtext=modehead
-                
+
         cref=self.getAttribute('cref')
         if cref!=None :
             creftemp=cref.split(',')
@@ -434,7 +435,7 @@ class Node() :
                     unique.wordwithpos.append(self.lex+'_'+self.type)
                     if uniqidpart.strip() == '1':
                             unique.endlineno = self.linenumber
-                            
+
         crefHead=self.getAttribute('crefHead')
         if crefHead!=None :
             listforentity=[]
@@ -455,7 +456,7 @@ class Node() :
                             unique=listforentity.pop(0)
                             unique.parent=self.getentity(self.upper.upper.coreferenceChainNodeList,cuniqueid)
                             unique.parentrelation=ctype
-                            
+
         crefChainHead=self.getAttribute('crefChainHead')
         if crefChainHead != None:
             crefChainHeadtemp = crefChainHead.split(',')
@@ -465,7 +466,7 @@ class Node() :
                 chain = self.getchainfromchainlist(self.upper.upper.coreferenceChainNodeList,chainid)
                 unique = self.getentityfromchainlist(chain ,uniqid)
                 chain.chainhead=unique
-                
+
         if attributeUpdateStatus == 0 :
             self.errors.append("Can't update attributes for node")
             self.probSent = True
@@ -535,7 +536,7 @@ class Node() :
         self.assignName()
 
     def assignName(self) :
-        if self.__attributes.has_key('name') :
+        if 'name' in self.__attributes :
             self.name = self.getAttribute('name')
         else :
             self.errors.append('No name for this token Node')
@@ -559,7 +560,7 @@ class Node() :
         return ('\t'.join(x for x in returnValue) + '\t' + delim.join(x for x in fs))
 
     def getAttribute(self,key) :
-        if self.__attributes.has_key(key) :
+        if key in self.__attributes :
             return self.__attributes[key]
         else :
             return None
@@ -617,18 +618,18 @@ class ChunkNode() :
         self.updateDrel()
 
     def assignName(self) :
-        if self.__attributes.has_key('name') :
+        if 'name' in self.__attributes :
             self.name = self.getAttribute('name')
         else :
             self.errors.append('No name for this chunk Node')
 
     def updateDrel(self) :
-        if self.__attributes.has_key('drel') :
+        if 'drel' in self.__attributes :
             drelList = self.getAttribute('drel').split(':')
             if len(drelList) == 2 :
                 self.parent = drelList[1]
                 self.parentRelation = self.getAttribute('drel').split(':')[0]
-        elif self.__attributes.has_key('dmrel') :
+        elif 'dmrel' in self.__attributes :
             drelList = self.getAttribute('dmrel').split(':')
             if len(drelList) == 2 :
                 self.parent = drelList[1]
@@ -666,7 +667,7 @@ class ChunkNode() :
         return returnStringList
 
     def getAttribute(self,key) :
-        if self.__attributes.has_key(key) :
+        if key in self.__attributes :
             return self.__attributes[key]
         else :
             return None
@@ -726,7 +727,7 @@ class ChunkNode_vandan() :
         self.updateDrel()
 
     def assignName(self) :
-        if self.__attributes.has_key('name') :
+        if 'name' in self.__attributes :
             self.name = self.getAttribute('name')
         else :
             self.errors.append('No name for this chunk Node')
@@ -857,11 +858,11 @@ class Sentence() :
                     lastContext = currentChunkNode
                 else :
                     self.upper.linecount += 1
-                    #currentNode = Node(line + '\n',lastContext ,self.upper.linecount)
-                    #lastContext.nodeList.append(currentNode)
-                    #currentNode.upper = lastContext
-		    # newer part vandan
-                    if len(splitLine)>0 :
+                    currentNode = Node(line + '\n',lastContext ,self.upper.linecount)
+                    lastContext.nodeList.append(currentNode)
+                    currentNode.upper = lastContext
+                    # newer part vandan
+                    if len(splitLine)>100000000000000 :
                         chunk_split = ''.join ([x for x in splitLine if 'chunkType=' in x]).replace('>','').split('=')[1].replace("'","").split(':')
                         chunk_name = chunk_split[1]
                         chunk_relation = chunk_split[0]
@@ -878,8 +879,8 @@ class Sentence() :
                             currentChunkNode.nodeList.append(currentNode_ext)
                             currentNode_ext.upper = currentChunkNode
                         previous_chunk_name = chunk_name
-                        
         for i in lastContext.nodeList:
+            #print (vars(i))
             for j in i.nodeList:
                 drel = j.getAttribute('drel')
                 if drel == None:
@@ -908,15 +909,15 @@ class Sentence() :
                     if 'head:' in j.text:
                         i.parentRelation = d_temp[0]
                         i.parent = self.find_dependency_parent_node(lastContext.nodeList,d_temp[1]).upper.name
-            
+
     def find_dependency_parent_node (self, nodeList,name):
         for i in nodeList:
             for j in i.nodeList:
                 if j.getAttribute('name') == name :
                     return j
         return None
-			
-	
+
+
     def addEdge(self, parent , child) :
         if parent in self.edges.iterkeys() :
             if child not in self.edges[parent] :
